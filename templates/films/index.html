@@ -1,0 +1,30 @@
+{% extends 'template.html' %}
+{% block title %}Фильмы{% endblock %}
+
+{% block content %}
+
+<div class="flex">
+  <h1 class="title">{{ page_title }}</h1>
+  <div class="socials">
+    <img src="images/vk.svg" alt="" class="social">
+    <img src="images/twitter.png" alt="" class="social">
+    <img src="images/facebook.png" alt="" class="social">
+  </div>
+</div>
+<div class="grid">
+  {% if films %}
+    {% for item in films %}
+      <div class="film">
+        <div class="rating">2</div>
+        <img src="{{ item.image }}" alt="">
+        <span class="film__title">{{ item.title }}</span>
+        <p class="film__paragraph">{{ item.description }}</p>
+        <a href="/films/{{ item.id }}" class="film__more">Подробнее</a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <span class="empty">Каталог пуст</span>
+  {% endif %}
+</div>
+
+{% endblock %}

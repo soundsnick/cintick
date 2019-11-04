@@ -1,0 +1,16 @@
+{% extends 'template.html' %}
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+<h1 class="title">Регистрация</h1>
+<form action="/users/register/" method="post">
+  {% csrf_token %}
+  <input type="text" name="email" class="comment__input" placeholder="Электронная почта">
+  <input type="password" name="password" class="comment__input" placeholder="Пароль">
+  <input type="submit" class="comment__button" value="Зарегистрироваться">
+  <div class="login">
+    <a href="/users/sign_in" class="genre">Войти</a>
+
+  </div>
+</form>
+{% endblock %}

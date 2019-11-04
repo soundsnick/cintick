@@ -1,0 +1,89 @@
+{% extends 'template.html' %}
+{% block title %}{{film.title}}{% endblock %}
+
+{% block content %}
+
+<div class="flex" style="align-items: flex-start; margin-top: 50px;">
+  <div class="film__cover--wrapper">
+    <img class="film__cover" src="{{ film.image }}" alt="">
+
+  </div>
+  <div style="margin-left: 50px;">
+    <h1 class="title">{{ film.title }}</h1>
+    <form action="/films/rating" class="login">
+      <input type="hidden" name="film" value="{{ film.id }}">
+      <select name="rate">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <input type="submit" value="Оценить">
+    </form>
+    <table class="film-info">
+      <tbody>
+        <tr>
+          <td>Рейтинг</td>
+          <td>{{ rating }}</td>
+        </tr>
+        <tr>
+          <td>Год</td>
+          <td>{{ film.year }}</td>
+        </tr>
+        <tr>
+          <td>Режиссер</td>
+          <td><a href="/director/{{ film.director.id }}" class="actor">{{ film.director.first_name }} {{ film.director.last_name}}</a></td>
+        </tr>
+        <tr>
+          <td>Жанр</td>
+          <td>
+            {% for genre in film.genres.all %}
+              <a class="genre" href="/genre/{{ actor.id }}">{{ genre.title }}</a>
+            {% endfor %}
+          </td>
+        </tr>
+        <tr>
+          <td>Время</td>
+          <td>{{ film.duration }} минут</td>
+        </tr>
+        <tr>
+          <td>В главных ролях</td>
+          <td>
+            {% for actor in film.actors.all %}
+              <a class="actor" href="/actor/{{ actor.id }}">{{ actor.first_name}} {{ actor.last_name }}</a>
+            {% endfor %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="film__description">{{ film.description }}</p>
+    <video src="{{ film.video }}" controls class="film__video"></video>
+    <div class="commentaries">
+      <h3 class="title">Комментарий</h3>
+      {% if request.session.auth %}
+      <form action="/comment/add">
+        {% csrf_token %}
+        <input type="text" name="author" class="comment__input" placeholder="Ваше имя">
+        <textarea name="text" class="comment__textarea" placeholder="Комментарий"></textarea>
+        <input type="hidden" name="film" value="{{ film.id }}">
+        <input type="submit" class="comment__button" value="Добавить">
+      </form>
+      {% else %}
+      <div class="login">
+        <a href="/users/sign_in" class="genre">Войдите чтобы оставить комментарий</a>
+      </div>
+      {% endif %}
+      {% for commentary in commentaries %}
+        <div class="comment">
+          <span class="comment__author">{{ commentary.author }}</span>
+          <p class="comment__text">{{ commentary.text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
