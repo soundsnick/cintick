@@ -1,0 +1,23 @@
+body {visibility:hidden;}
+.print {visibility:visible;}
+.film__cover--wrapper{
+  display: none;
+}
+.ticket{
+  background: #bfbfbf;
+  color: #282828;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+}
+.ticket .title{
+  display: block!important;
+  margin: 25px;
+  margin-top: 0;
+}
+.ticket .session{
+  border: 1px solid grey;
+}
+.control{
+  display: none;
+}

@@ -1,0 +1,56 @@
+{% extends 'template.html' %}
+{% block title %}Купить билеты{% endblock %}
+
+{% block content %}
+
+<div class="flex" style="align-items: flex-start; margin-top: 50px;">
+  <div class="film__cover--wrapper">
+    <img class="film__cover" src="{{ film.image }}" alt="">
+
+  </div>
+  <div style="margin-left: 50px; flex: 1">
+    <div class="sessions">
+      <h3 class="title">Купить билеты</h3>
+      <table class="sessions">
+        <tbody>
+          <tr>
+            <th>Время сеанса: <span style="color: orange">{{ seance.time|date:'d.m.Y H:i' }}</span></th>
+            <th>Фильм: <span style="color: orange">{{ film.title }}</span></th>
+          </tr>
+          <tr>
+            <td>Стоимость билета: <span style="color: orange">{{ seance.price }}тг</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="seats" style="margin-bottom: 50px;">
+      <form action="/tickets/success/" method="post">
+        <input type="hidden" name="seance" value="{{ seance.id }}">
+        <br>
+        <input class="comment__input" type="textarea" name="email" placeholder="Ваша Электронная почта">
+        <div class="seats__table">
+          {% for i in seats_number %}
+            {% if i in seats_got %}
+            <label class="seat-label">
+              <div class="seat got">{{ i }}</div>
+            </label>
+            {% else %}
+            <label class="seat-label">
+              <input type="checkbox" name="seat[]" value="{{i}}" hidden>
+              <div class="seat">{{ i }}</div>
+            </label>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="screen">Экран</div>
+        {% csrf_token %}
+        <input type="submit" class="genre" value="Купить" style="border: none; outline: none; cursor: pointer;">
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}

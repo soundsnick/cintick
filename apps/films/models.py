@@ -44,3 +44,14 @@ class Rate(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, null = True)
     rate = models.IntegerField('Rating', default = 0)
     film = models.ForeignKey(Film, on_delete = models.CASCADE, null = True)
+
+class Seance(models.Model):
+    film = models.ForeignKey(Film, on_delete = models.CASCADE, null = True)
+    price = models.IntegerField('Price', default = 1500)
+    time = models.DateTimeField('Seance time')
+
+class Book(models.Model):
+    code = models.CharField('Secret Code', max_length = 100)
+    email = models.CharField('Email', max_length = 100)
+    seat_number = models.IntegerField('Seat number', default = 0)
+    seance = models.ForeignKey(Seance, on_delete = models.CASCADE, null = True)

@@ -1,9 +1,12 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
-from .models import Film, Genre, Actor, Director, Commentary, Rate
+from .models import Film, Genre, Actor, Director, Commentary, Rate, Seance, Book
 from users.models import User
 from django.utils import timezone
 from django.db.models import Avg
+from datetime import datetime
+import hashlib
+from random import randint
 
 def index(request):
     films = Film.objects.all
@@ -22,9 +25,10 @@ def film(request, id=None):
         genres = Genre.objects.all
         commentaries = Commentary.objects.filter(film=film).order_by('-id')
         rating = str(Rate.objects.filter(film=film).aggregate(Avg('rate'))['rate__avg'])
+        seances = Seance.objects.filter(film=film)
     except:
         raise Http404("Фильм не найден!")
-    return render(request, 'films/film.html', {'film': film, 'genres': genres, 'commentaries': commentaries, 'rating': rating})
+    return render(request, 'films/film.html', {'film': film, 'genres': genres, 'commentaries': commentaries, 'rating': rating, 'seances': seances, 'todayDate': datetime.now().strftime("%d.%m.%Y")})
 
 def genre(request, id=None):
     try:
@@ -72,3 +76,22 @@ def rating(request):
             return redirect('/films/'+request.GET['film'])
     else:
         return redirect('/users/sign_in')
+
+def tickets(request, id=None):
+    session = Seance.objects.get(id=id)
+    seats_got = list(Book.objects.filter(seance=session).values_list('seat_number', flat=True))
+    return render(request, 'films/tickets.html', {'seance': session, 'film': session.film, 'seats_number': range(1,121), 'seats_got': seats_got})
+
+def success(request, id=None):
+    book = request.POST
+    if Seance.objects.get(id=request.POST.get('seance')):
+        seance = Seance.objects.get(id=request.POST.get('seance'))
+        info = {}
+        info['seats'] = ",".join(book.getlist('seat[]'))
+        info['secret'] = randint(10000, 99999)
+        for seat in book.getlist('seat[]'):
+            se = Book(email=request.POST['email'], code=info['secret'], seat_number=seat, seance=seance)
+            se.save()
+        return render(request, 'films/success.html', {'book': book, 'seance': seance, 'film': seance.film, 'info': info})
+    else:
+        raise Http404("")

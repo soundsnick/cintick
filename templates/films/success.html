@@ -1,0 +1,48 @@
+{% extends 'template.html' %}
+{% block title %}Купить билеты{% endblock %}
+
+{% block content %}
+
+<div class="flex" style="align-items: flex-start; margin-top: 50px;">
+  <div class="film__cover--wrapper">
+    <img class="film__cover" src="{{ film.image }}" alt="">
+
+  </div>
+  <div style="margin-left: 50px; flex: 1">
+    <div class="sessions">
+      <h3 class="title">Поздравляем ваши билеты у вас!</h3>
+      <div class="print ticket">
+        <h3 class="title">Билет на сеанс {{ film.title }}</h3>
+        <table class="sessions">
+          <tbody>
+            <tr>
+              <th>Время сеанса: <span style="color: orange">{{ seance.time|date:'d.m.Y H:i' }}</span></th>
+              <th>Фильм: <span style="color: orange">{{ film.title }}</span></th>
+            </tr>
+            <tr>
+              <td>Ваши места</td>
+              <td>{{ info.seats }}</td>
+            </tr>
+            <tr>
+              <td>Покажите данный код на кассе</td>
+              <td>{{ info.secret }}</td>
+            </tr>
+            <tr class="control">
+              <td><span style="color: orange">Распечатайте чек</span></td>
+              <td><button class="genre" onclick="window.print(); return false;"  style="border: none; outline: none; cursor: pointer;">Распечатать</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .sidebar{
+    display: none;
+  }
+</style>
+{% endblock %}

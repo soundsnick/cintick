@@ -59,6 +59,29 @@
     </table>
     <p class="film__description">{{ film.description }}</p>
     <video src="{{ film.video }}" controls class="film__video"></video>
+    <div class="sessions">
+      <h3 class="title">Купить билеты</h3>
+      <table class="sessions">
+        <tbody>
+          <tr>
+            <th>Время сеанса</th>
+            <th>Купить</th>
+          </tr>
+          {% for seance in seances %}
+              <tr>
+                {% if seance.time|date:'d.m.Y' == todayDate %}
+                  <td>Сегодня</td>
+                {% else %}
+                  <td>{{ seance.time|date:'d.m.Y H:i' }}</td>
+                {% endif %}
+                <td>
+                  <a class="genre" href="/films/tickets/{{ seance.id }}">Купить билет</a>
+                </td>
+              </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     <div class="commentaries">
       <h3 class="title">Комментарий</h3>
       {% if request.session.auth %}
